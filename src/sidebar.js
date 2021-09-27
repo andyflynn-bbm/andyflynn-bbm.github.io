@@ -60,8 +60,8 @@ function showStatistics(selection) {
 
   function calcSize(collection) {
     const map = new Map()
-    const total = collection.entries().reduce((total, item) => {
-      return total + item.value
+    const total = [...collection.values()].reduce((total, item) => {
+      return total + item
     }, 0)
     map.set('Selected items', total)
     return map
