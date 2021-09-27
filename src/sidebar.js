@@ -64,7 +64,7 @@ function showStatistics(selection) {
       return total + item
     }, 0)
     map.set('Selected items', total)
-    return map
+    return new Map([...map.entries()])
   }
   
   miro.onReady(() => {
