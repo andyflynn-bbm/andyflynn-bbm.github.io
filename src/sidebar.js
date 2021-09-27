@@ -63,7 +63,7 @@ function showStatistics(selection) {
     const total = collection.entries().reduce((total, item) => {
       return total + item.value
     }, 0)
-    map.set('Selected items', collection.size)
+    map.set('Selected items', total)
     return map
   }
   
