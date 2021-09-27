@@ -1,7 +1,9 @@
 function showStatistics(selection) {
     clear()
     const statByType = calcByType(selection)
+    const total = calcSize(statByType)
     getContainer().appendChild(createStatTable('by Type', 'Looks like the selection is empty.', statByType))
+    getContainer().appendChild(createStatTable("Total", 'Looks like the selection is empty.', total))
   }
   
   function clear() {
@@ -54,6 +56,12 @@ function showStatistics(selection) {
       map.set(key, !count ? 1 : count + 1)
     })
     return new Map([...map.entries()].sort((a, b) => b[1] - a[1]))
+  }
+
+  function calcSize(collection) {
+    const map = new Map()
+    map.set('Selected items', collection.size)
+    return map
   }
   
   miro.onReady(() => {
