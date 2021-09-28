@@ -1,99 +1,100 @@
 @font-face {
-    font-family: 'Formular';
-    src: url('https://miro.com/app/static/static/fonts/general/FormularRegular/formular-regular.4b9930.woff2');
-  }
+  font-family: 'Formular';
+  src: url('https://miro.com/app/static/static/fonts/general/FormularRegular/formular-regular.4b9930.woff2');
+}
+
+body,
+button,
+input,
+textarea,
+select {
+  font: 14px OpenSans, Arial, Helvetica, sans-serif;
+  font-style: normal;
+  font-variant-ligatures: normal;
+  font-variant-caps: normal;
+  font-variant-numeric: normal;
+  font-variant-east-asian: normal;
+  font-weight: normal;
+  font-stretch: normal;
+  font-size: 14px;
+  line-height: normal;
+  font-family: OpenSans, Arial, Helvetica, sans-serif;
+}
+
+html {
+  height: 100%;
+}
+body {
+  height: 100%;
+  margin: 0;
+  color: #09043C;
+  font: 14px OpenSans, Arial, Helvetica, sans-serif;
+}
+* {
+  user-select: none;
+}
+#react-app {
+  height: 100%;
+}
+.edit-mode {
+  display: flex;
+}
+.select-start-screen {
+  display: flex;
+  height: 48px;
+  justify-content: center;
+  align-items: center;
+  font-size: 16px;
+}
+.icon {
+  width: 24px;
+  height: 24px;
+}
+.btn {
+  height: 48px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+.btn:hover {
+  color: #4262ff;
+}
+.play-button {
+  width: 48px;
+  margin-left: 8px;
+  margin-right: 8px;
+}
+.hotspot-button {
+  margin-right: 16px;
+}
+.hotspot-button span {
+  margin-left: 4px;
+}
+.link-button span {
+  margin-left: 2px;
+}
+.exit-button {
+  width: 48px;
+  margin: 0 8px;
+  font-weight: bold;
+}
+.screen-number {
+  height: 48px;
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+}
+.prev-button, .next-button {
+  width: 40px;
+}
+.next-button {
+  margin-right: 8px;
+  transform: rotate(180deg);
+}
+.btn--disabled {
+  pointer-events: none;
+  cursor: default;
+  color: #999;
+}
   
-  body,
-  button,
-  input,
-  textarea,
-  select {
-    font: 14px OpenSans, Arial, Helvetica, sans-serif;
-    font-style: normal;
-    font-variant-ligatures: normal;
-    font-variant-caps: normal;
-    font-variant-numeric: normal;
-    font-variant-east-asian: normal;
-    font-weight: normal;
-    font-stretch: normal;
-    font-size: 14px;
-    line-height: normal;
-    font-family: OpenSans, Arial, Helvetica, sans-serif;
-  }
-  
-  .sidebar__content {
-    display: flex;
-    flex-grow: 1;
-    position: relative;
-    justify-content: flex-end;
-    min-width: 0;
-    min-height: 0;
-    height: 100%;
-  }
-  
-  .stat-list {
-    width: 340px;
-  }
-  
-  .stat-list .stat-list__header {
-    font-size: 14px;
-    font-weight: bold;
-    height: 44px;
-    padding: 8px 0 0 12px;
-    margin-bottom: 20px;
-    font-family: Formular, sans-serif;
-    font-size: 24px;
-    font-weight: 500;
-  }
-  
-  .stat-list .stat-list__empty {
-    color: #050038;
-    font-size: 12px;
-    margin: 20px 0 20px 0;
-    padding: 0 24px 0 24px;
-    text-align: center;
-  }
-  
-  .stat-list .stat-list__table {
-    margin-bottom: 40px;
-  }
-  
-  .stat-list .stat-list__title {
-    display: flex;
-    padding: 0 20px 0 24px;
-  }
-  
-  .stat-list .stat-list__title span {
-    color: #050038;
-    font-weight: bold;
-    padding: 0 4px;
-    font-size: 14px;
-  }
-  
-  .stat-list .stat-list__title::after,
-  .stat-list .stat-list__title::before {
-    content: '';
-    display: block;
-    background-color: #e1e0e7;
-    height: 1px;
-    flex-grow: 1;
-    margin-top: 9px;
-  }
-  
-  .stat-list .stat-list__item {
-    font-family: Formular, sans-serif;
-    font-size: 18px;
-    line-height: 20px;
-    margin: 10px 0 10px 0;
-    font-weight: normal;
-    padding: 0 24px 0 24px;
-  }
-  
-  .stat-list .stat-list__item .stat-list__item-name {
-    text-transform: capitalize;
-    margin-left: 4px;
-  }
-  
-  .stat-list .stat-list__item .stat-list__item-value {
-    float: right;
-  }
