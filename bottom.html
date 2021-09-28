@@ -1,0 +1,21 @@
+<html>
+  <head>
+    <title>Hotspot Panel</title>
+    <link rel="stylesheet" href="src/style.css" />
+  </head>
+  <body>
+    <div id="bottom-panel" class="bottom-panel">
+      <div className="edit-mode">
+				<div className="btn hotspot-button" @click="createHotspot">
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <path fill="#96cdf7" fill-rule="evenodd" stroke="currentColor" stroke-width="2" d="M3 3h18v18H3z"/>
+          </svg>
+					<span>Hotspot</span>
+				</div>
+			</div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <script src="https://miro.com/app/static/sdk.1.1.js"></script>
+    <script src="src/bottom-panel.js"></script>
+  </body>
+</html>
