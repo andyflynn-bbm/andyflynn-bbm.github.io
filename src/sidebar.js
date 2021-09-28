@@ -1,9 +1,10 @@
 function showStatistics(selection) {
     clear()
-    const statByType = calcByType(selection)
-    const total = calcSize(statByType)
-    getContainer().appendChild(createStatTable('by Type', 'Looks like the selection is empty.', statByType))
-    getContainer().appendChild(createStatTable("Total", 'Looks like the selection is empty.', total))
+    // const statByType = calcByType(selection)
+    // const total = calcSize(statByType)
+    // getContainer().appendChild(createStatTable('by Type', 'Looks like the selection is empty.', statByType))
+    // getContainer().appendChild(createStatTable("Total", 'Looks like the selection is empty.', total))
+    getContainer().appendChild(buildMetaDataTable())
   }
   
   function clear() {
@@ -65,6 +66,31 @@ function showStatistics(selection) {
     }, 0)
     map.set('Selected items', total)
     return new Map([...map.entries()])
+  }
+
+  function getWidgetMetadata(widgets) {
+    return widgets.map(widget => ({id: widget.id, metadata: widget.widget.metadata}))
+  }
+
+  function buildMetaDataTable(metadata) {
+    const statView = document.createElement('div')
+    statView.className = 'stat-list__table'
+  
+    metadata.forEach(widget => {
+      const titleView = document.createElement('div')
+      titleView.className = 'stat-list__title'
+      titleView.innerHTML = `<span>${widget.id}</span>`
+      statView.appendChild(titleView)
+      const list = document.createElement('ul')
+      widget.metadata.forEach(metadata => {
+        const item = document.createElement('li')
+        item.innerHTML = `${metadata}`
+        list.appendChild(item)
+      })
+      statView.appendChild(list)
+    })
+
+    return statView
   }
   
   miro.onReady(() => {
