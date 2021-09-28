@@ -82,9 +82,9 @@ function showStatistics(selection) {
       titleView.innerHTML = `<span>${widget.id}</span>`
       statView.appendChild(titleView)
       const list = document.createElement('ul')
-      widget.metadata.forEach(metadata => {
+      Object.keys(widget.metadata).forEach(key => {
         const item = document.createElement('li')
-        item.innerHTML = `${metadata}`
+        item.innerHTML = `${widget.metadata[key]}`
         list.appendChild(item)
       })
       statView.appendChild(list)
