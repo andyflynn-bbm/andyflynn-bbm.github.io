@@ -1,6 +1,6 @@
 var vm = new Vue({
+  el: '#bottom-panel',
   methods: {
-    el: '#bottom-panel',
     createHotspot() {
       console.log('creating hotspot')
     }
