@@ -76,7 +76,7 @@ function showStatistics(selection) {
     const statView = document.createElement('div')
     statView.className = 'stat-list__table'
   
-    metadata.forEach(widget => {
+    metadata?.forEach(widget => {
       const titleView = document.createElement('div')
       titleView.className = 'stat-list__title'
       titleView.innerHTML = `<span>${widget.id}</span>`
