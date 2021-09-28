@@ -3,11 +3,53 @@ const APP_ID = '3074457364657223133'
 miro.onReady(() => {
   var vm = new Vue({
     el: '#bottom-panel',
+    data() {
+      return {
+        state: {
+          viewMode: 'edit'
+        }
+      }
+    },
+    computed: {
+      playMode() {
+        return this.state.viewMode === 'play'
+      },
+      editMode() {
+        return this.state.viewMode === 'edit'
+      }
+    },
     methods: {
       createHotspot(pos) {
         let {x,y} = pos
         console.log(`creating hotspot at ${x},${y}`)
         createHotspot(pos)
+      },
+      subscribePrototypingModeEvents() {
+        //miro.addListener('ESC_PRESSED', this.onExitPrototypingMode)
+        miro.addListener('CANVAS_CLICKED', this.onCanvasClicked)
+        //miro.addListener('COMMENT_CREATED', onCommentCreated)
+      },
+      onCanvasClicked(e) {
+        const widgets = await miro.board.widgets.__getIntersectedObjects(e.data)
+        const hotspot = widgets.filter(isHotspotWidget)[0]
+
+        if (hotspot) {
+          // const screenWidget = await goToWidgetFromHotspot(hotspot.id)
+          // if (screenWidget) {
+          //   const screenIndex = this.findScreenIndex(this.state.screens, screenWidget)
+          //   this.setState({screenIndex: screenIndex})
+          // }
+          console.log('Hotspot clicked!', hotspot.id)
+        } else {
+          //blinkHotspots()
+          console.log('No hotspot clicked')
+        }
+      },
+      play() {
+        this.state.viewMode = 'play'
+      },
+      edit() {
+        this.state.viewMode = 'edit'
       }
     },
     mounted() {
@@ -26,6 +68,7 @@ miro.onReady(() => {
         },
       }
       miro.board.ui.initDraggableItemsContainer(this.$el, options)
+      this.subscribePrototypingModeEvents()
     }
   })
 })
@@ -76,4 +119,8 @@ async function createHotspot(pos) {
 		rotation: 0,
 		text: '',
 	})
+}
+
+function isHotspotWidget(widget) {
+	return widget.metadata[APP_ID] && widget.metadata[APP_ID].hotspot
 }
