@@ -4,7 +4,7 @@ function showStatistics(selection) {
     // const total = calcSize(statByType)
     // getContainer().appendChild(createStatTable('by Type', 'Looks like the selection is empty.', statByType))
     // getContainer().appendChild(createStatTable("Total", 'Looks like the selection is empty.', total))
-    getContainer().appendChild(buildMetaDataTable())
+    getContainer().appendChild(buildMetaDataTable(selection))
   }
   
   function clear() {
@@ -72,11 +72,11 @@ function showStatistics(selection) {
     return widgets.map(widget => ({id: widget.id, metadata: widget.widget.metadata}))
   }
 
-  function buildMetaDataTable(metadata) {
+  function buildMetaDataTable(selection) {
     const statView = document.createElement('div')
     statView.className = 'stat-list__table'
   
-    metadata?.forEach(widget => {
+    selection?.forEach(widget => {
       const titleView = document.createElement('div')
       titleView.className = 'stat-list__title'
       titleView.innerHTML = `<span>${widget.id}</span>`
