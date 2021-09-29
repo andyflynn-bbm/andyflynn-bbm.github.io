@@ -90,9 +90,10 @@ miro.onReady(() => {
         await miro.board.ui.closeBottomPanel() // This command should be last
       },
       async updateLineStyle(e) {
-        console.log(e, e.data)
-        // assume that e.data is an array of created widgets
-        const lines = e.data.filter(widget => widget.type === 'LINE')
+        const lines = await miro.board.widgets.get({'type': 'LINE'})
+        // console.log(e, e.data)
+        // // assume that e.data is an array of created widgets
+        // const lines = e.data.filter(widget => widget.type === 'LINE')
         const newStyle = {
           style: {
             lineColor: '#2C9BF0',
@@ -104,11 +105,12 @@ miro.onReady(() => {
 					},
         }
         if (lines.length > 0) {
-          const newLines = lines.map(({id}) => ({
-            id,
-            newStyle,
-          }))
           const hotspots = await getHotspots()
+          hotspotIds = hotspots.map(h => h.id)
+          const newLines = lines.filter(l => hotspotIds.some(h => h === l.startWidgetId || h === l.endWidgetId)).map(({id}) => ({
+            id,
+            ...newStyle
+          }))
           // check to see if any of the lines start or end at a hotspot
           // update the line styles
           await miro.board.widgets.update(newLines)
