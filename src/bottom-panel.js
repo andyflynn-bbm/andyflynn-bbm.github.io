@@ -27,11 +27,6 @@ miro.onReady(() => {
         console.log(`creating hotspot at ${x},${y}`)
         createHotspot(pos)
       },
-      subscribePrototypingModeEvents() {
-        miro.addListener('ESC_PRESSED', this.edit)
-        miro.addListener('CANVAS_CLICKED', this.onCanvasClicked)
-        //miro.addListener('COMMENT_CREATED', onCommentCreated)
-      },
       async onCanvasClicked(e) {
         if (this.state.viewMode === 'play') {
           const widgets = await miro.board.widgets.__getIntersectedObjects(e.data)
@@ -50,7 +45,7 @@ miro.onReady(() => {
           }
         }
       },
-      play() {
+      async play() {
         this.state.viewMode = 'play'
         const shapes = await miro.board.widgets.get({'type': 'SHAPE'})
         const startHotspotWidget = findStartHotspot(shapes)
@@ -105,10 +100,16 @@ miro.onReady(() => {
         },
       }
       miro.board.ui.initDraggableItemsContainer(this.$el, options)
-      this.subscribePrototypingModeEvents()
+      subscribePrototypingModeEvents()
     }
   })
 })
+
+function subscribePrototypingModeEvents() {
+  miro.addListener('ESC_PRESSED', this.edit)
+  miro.addListener('CANVAS_CLICKED', this.onCanvasClicked)
+  //miro.addListener('COMMENT_CREATED', onCommentCreated)
+}
 
 async function createHotspot(pos) {
 	const width = 152
