@@ -16,6 +16,9 @@ miro.onReady(() => {
       },
       editMode() {
         return this.state.viewMode === 'edit'
+      },
+      selectMode() {
+        return this.state.viewMode === 'select'
       }
     },
     methods: {
@@ -25,7 +28,7 @@ miro.onReady(() => {
         createHotspot(pos)
       },
       subscribePrototypingModeEvents() {
-        //miro.addListener('ESC_PRESSED', this.onExitPrototypingMode)
+        miro.addListener('ESC_PRESSED', this.edit)
         miro.addListener('CANVAS_CLICKED', this.onCanvasClicked)
         //miro.addListener('COMMENT_CREATED', onCommentCreated)
       },
@@ -35,7 +38,7 @@ miro.onReady(() => {
           const hotspot = widgets.filter(isHotspotWidget)[0]
 
           if (hotspot) {
-            // const screenWidget = await goToWidgetFromHotspot(hotspot.id)
+            const screenWidget = await goToWidgetFromHotspot(hotspot.id)
             // if (screenWidget) {
             //   const screenIndex = this.findScreenIndex(this.state.screens, screenWidget)
             //   this.setState({screenIndex: screenIndex})
@@ -49,6 +52,30 @@ miro.onReady(() => {
       },
       play() {
         this.state.viewMode = 'play'
+        const shapes = await miro.board.widgets.get({'type': 'SHAPE'})
+        const startHotspotWidget = findStartHotspot(shapes)
+        if (startHotspotWidget) {
+          const screenWidget = await enterPrototypingMode(startHotspotWidget)
+          if (screenWidget) {
+            //miro.__setRuntimeState({prototypingMode: true})
+            //this.subscribePrototypingModeEvents()
+            //const screens = await findAllScreens()
+            // this.setState({
+            //   viewMode: 'play',
+            //   screens: screens,
+            //   screenIndex: this.findScreenIndex(screens, screenWidget),
+            // })
+            // miro.board.ui.resizeTo({width: PLAY_WIDTH})
+          } else {
+            this.edit()
+          }
+        } else {
+          this.state.viewMode = 'select'
+          const res = await createStartHotspot()
+          if (res) {
+            this.play()
+          }
+        }
       },
       async edit() {
         this.state.viewMode = 'edit'
@@ -56,7 +83,7 @@ miro.onReady(() => {
         await miro.board.ui.__showButtonsPanels('all')
         await miro.board.ui.__clearToolbarModeLimit()
         await miro.board.__enableLeftClickOnCanvas()
-        //await restoreAllLinks()
+        await showHideAllLinks(true)
         await showHideHotspots(true)
 
         //await miro.board.ui.closeBottomPanel() // This command should be last
@@ -158,4 +185,164 @@ async function showHideHotspots(show) {
 		clientVisible: show,
 	}))
 	miro.board.widgets.update(updatingHotspots)
+}
+
+async function enterPrototypingMode(startHotspotWidget) {
+	const shapes = await miro.board.widgets.get({'type': 'SHAPE'})
+	const hotspots = shapes.filter(isHotspotWidget)
+	const hotspotsIsValid = await checkAllHotspotsLinks(hotspots)
+
+	if (hotspotsIsValid) {
+		const screenWidget = await goToWidgetFromHotspot(startHotspotWidget.id)
+		if (screenWidget) {
+			await miro.board.widgets.bringForward(hotspots)
+			await miro.board.ui.__hideButtonsPanels(['top', 'bottomBar', 'map'])
+			await miro.board.ui.__limitToolbarMode('commentor')
+			await miro.board.selection.selectWidgets([])
+			await miro.board.__disableLeftClickOnCanvas()
+			await showHideAllLinks(false)
+			await showHideHotspots(false)
+		}
+		return screenWidget
+	}
+}
+
+async function createStartHotspot() {
+	return miro.board.selection.enterSelectWidgetsMode()
+		.then(async (res) => {
+			if (res.selectedWidgets.length) {
+				const screen = res.selectedWidgets[0]
+				const flagWidget = (await miro.board.widgets.create({
+					type: 'SHAPE',
+					y: screen.bounds.y,
+					x: screen.bounds.left - 50 - screen.bounds.height * 0.2,
+					width: 100,
+					height: 100,
+					style: {
+						backgroundColor: '#f24726',
+						backgroundOpacity: 0.25,
+						borderOpacity: 1,
+						borderStyle: 2,
+						borderWidth: 0,
+					},
+					'metadata': {
+						[APP_ID]: {
+							hotspot: true,
+							startHotspot: true,
+						},
+					},
+				}))[0]
+
+				await miro.board.widgets.create({
+					type: 'LINE',
+					startWidgetId: flagWidget.id,
+					endWidgetId: screen.id,
+					style: {
+						lineStartStyle: 0,
+						lineEndStyle: 1,
+						lineStyle: 2,
+						lineType: 2,
+					},
+				})
+
+				return flagWidget
+			} else {
+				return undefined
+			}
+		})
+}
+
+async function checkAllHotspotsLinks(hotspots) {
+	const lines = await miro.board.widgets.get({type: 'line'})
+	let hotspotsWithoutLinks = hotspots.slice()
+	let linkWithoutScreen
+
+	lines.forEach(line => {
+		//for startWidgetId
+		const linkedHotspot1 = hotspots.find(h => h.id === line.startWidgetId)
+		if (linkedHotspot1) {
+			hotspotsWithoutLinks = hotspotsWithoutLinks.filter(h => h.id !== linkedHotspot1.id)
+		}
+
+		//for endWidgetId
+		const linkedHotspot2 = hotspots.find(h => h.id === line.endWidgetId)
+		if (linkedHotspot2) {
+			hotspotsWithoutLinks = hotspotsWithoutLinks.filter(h => h.id === linkedHotspot2.id)
+		}
+
+    // If the line links from a hotspot but doesn't link to another widget
+		if ((linkedHotspot1 || linkedHotspot2) && (!line.startWidgetId || !line.endWidgetId)) {
+			linkWithoutScreen = line
+		}
+	})
+
+	if (linkWithoutScreen) {
+		miro.showErrorNotification('Please attach link to some screen')
+		miro.board.viewport.zoomToObject(linkWithoutScreen)
+		return Promise.resolve(false)
+	}
+
+	if (hotspotsWithoutLinks.length > 0) {
+		miro.showErrorNotification('Please add link to hotspot')
+		miro.board.viewport.zoomToObject(hotspotsWithoutLinks[0])
+		return Promise.resolve(false)
+	}
+
+	return Promise.resolve(true)
+}
+
+async function goToWidgetFromHotspot(hotspotId) {
+	const lines = await miro.board.widgets.get({'type': 'LINE', 'startWidgetId': hotspotId})
+	if (lines.length > 0) {
+		if (lines.length > 1) {
+			miro.showErrorNotification('Too many links')
+		} else {
+			const line = (lines[0])
+			if (!line.endWidgetId) {
+				miro.showErrorNotification('Can not find the end of connection')
+			} else {
+				const sourceWidget = (await miro.board.widgets.get({'id': line.startWidgetId}))[0]
+				if (isHotspotWidget(sourceWidget)) {
+					const targetWidget = (await miro.board.widgets.get({'id': line.endWidgetId}))[0]
+					return gotoWidget(targetWidget)
+				}
+			}
+		}
+	} else {
+		miro.showErrorNotification('Hotspot has no links')
+	}
+}
+
+async function gotoWidget(targetWidget) {
+	await miro.board.selection.selectWidgets([])
+	zoomToWidget(targetWidget)
+	return targetWidget
+}
+
+async function zoomToWidget(w) {
+	const v = {
+		x: w.bounds.left,
+		y: w.bounds.top,
+		width: w.bounds.width,
+		height: w.bounds.height,
+	}
+	const padding = {
+		top: 60,
+		left: 80,
+		right: 80,
+		bottom: 70,
+	}
+	miro.board.viewport.__mask(v, padding)
+	await miro.board.viewport.setViewport(v, padding)
+}
+
+function showHideAllLinks(show) {
+	const lines = await miro.board.widgets.get({'type': 'LINE'})
+	const newLines = lines
+		.map(({id}) => ({
+			id,
+			clientVisible: show,
+		}))
+
+	await miro.board.widgets.update(newLines)
 }
