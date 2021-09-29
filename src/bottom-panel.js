@@ -27,6 +27,11 @@ miro.onReady(() => {
         console.log(`creating hotspot at ${x},${y}`)
         createHotspot(pos)
       },
+      subscribePrototypingModeEvents() {
+        miro.addListener('ESC_PRESSED', this.edit)
+        miro.addListener('CANVAS_CLICKED', this.onCanvasClicked)
+        //miro.addListener('COMMENT_CREATED', onCommentCreated)
+      },
       async onCanvasClicked(e) {
         debugger
         if (this.state.viewMode === 'play') {
@@ -54,7 +59,7 @@ miro.onReady(() => {
           const screenWidget = await enterPrototypingMode(startHotspotWidget)
           if (screenWidget) {
             //miro.__setRuntimeState({prototypingMode: true})
-            subscribePrototypingModeEvents()
+            this.subscribePrototypingModeEvents()
             //const screens = await findAllScreens()
             // this.setState({
             //   viewMode: 'play',
@@ -105,12 +110,6 @@ miro.onReady(() => {
     }
   })
 })
-
-function subscribePrototypingModeEvents() {
-  miro.addListener('ESC_PRESSED', this.edit)
-  miro.addListener('CANVAS_CLICKED', this.onCanvasClicked)
-  //miro.addListener('COMMENT_CREATED', onCommentCreated)
-}
 
 async function createHotspot(pos) {
 	const width = 152
@@ -321,7 +320,6 @@ async function goToWidgetFromHotspot(hotspotId) {
 
 async function gotoWidget(targetWidget) {
 	await miro.board.selection.selectWidgets([])
-  debugger
 	zoomToWidget(targetWidget)
 	return targetWidget
 }
@@ -339,10 +337,8 @@ async function zoomToWidget(w) {
 		right: 80,
 		bottom: 70,
 	}
-  debugger
 	miro.board.viewport.__mask(v, padding)
 	await miro.board.viewport.setViewport(v, padding)
-  debugger
 }
 
 async function showHideAllLinks(show) {
