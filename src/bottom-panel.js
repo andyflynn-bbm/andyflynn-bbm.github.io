@@ -220,7 +220,7 @@ async function createStartHotspot() {
 					width: 100,
 					height: 100,
 					style: {
-						backgroundColor: '#f24726',
+						backgroundColor: '#ff9d94',
 						backgroundOpacity: 0.25,
 						borderOpacity: 1,
 						borderStyle: 2,
