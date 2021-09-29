@@ -50,8 +50,16 @@ miro.onReady(() => {
       play() {
         this.state.viewMode = 'play'
       },
-      edit() {
+      async edit() {
         this.state.viewMode = 'edit'
+        await miro.board.viewport.__unmask()
+        await miro.board.ui.__showButtonsPanels('all')
+        await miro.board.ui.__clearToolbarModeLimit()
+        await miro.board.__enableLeftClickOnCanvas()
+        //await restoreAllLinks()
+        await showHotspots()
+
+        //await miro.board.ui.closeBottomPanel() // This command should be last
       }
     },
     mounted() {
@@ -141,4 +149,13 @@ async function blinkHotspots() {
 async function getHotspots() {
 	const shapes = await miro.board.widgets.get({type: 'shape'})
 	return shapes.filter(isHotspotWidget)
+}
+
+async function showHideHotspots(show) {
+	const hotspots = await getHotspots()
+	const updatingHotspots = hotspots.map(h => ({
+		id: h.id,
+		clientVisible: show,
+	}))
+	miro.board.widgets.update(updatingHotspots)
 }
