@@ -88,6 +88,31 @@ miro.onReady(() => {
         await showHideHotspots(true)
 
         await miro.board.ui.closeBottomPanel() // This command should be last
+      },
+      async updateLineStyle(e) {
+        console.log(e, e.data)
+        // assume that e.data is an array of created widgets
+        const lines = e.data.filter(widget => widget.type === 'LINE')
+        const newStyle = {
+          style: {
+            lineColor: '#2C9BF0',
+						lineEndStyle: 1,
+						lineStartStyle: 0,
+						lineStyle: 4,
+            lineThickness: 4,
+						lineType: 1,
+					},
+        }
+        if (lines.length > 0) {
+          const newLines = lines.map(({id}) => ({
+            id,
+            newStyle,
+          }))
+          const hotspots = await getHotspots()
+          // check to see if any of the lines start or end at a hotspot
+          // update the line styles
+          await miro.board.widgets.update(newLines)
+        }
       }
     },
     mounted() {
@@ -106,7 +131,7 @@ miro.onReady(() => {
         },
       }
       miro.board.ui.initDraggableItemsContainer(this.$el, options)
-      //subscribePrototypingModeEvents()
+      miro.addListener('WIDGETS_CREATED', this.updateLineStyle)
     }
   })
 })
