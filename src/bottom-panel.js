@@ -82,7 +82,7 @@ miro.onReady(() => {
         await showHideAllLinks(true)
         await showHideHotspots(true)
 
-        //await miro.board.ui.closeBottomPanel() // This command should be last
+        await miro.board.ui.closeBottomPanel() // This command should be last
       }
     },
     mounted() {
@@ -101,7 +101,7 @@ miro.onReady(() => {
         },
       }
       miro.board.ui.initDraggableItemsContainer(this.$el, options)
-      subscribePrototypingModeEvents()
+      //subscribePrototypingModeEvents()
     }
   })
 })
@@ -195,9 +195,7 @@ async function enterPrototypingMode(startHotspotWidget) {
 	const hotspotsIsValid = await checkAllHotspotsLinks(hotspots)
 
 	if (hotspotsIsValid) {
-    debugger
 		const screenWidget = await goToWidgetFromHotspot(startHotspotWidget.id)
-    debugger
 		if (screenWidget) {
 			await miro.board.widgets.bringForward(hotspots)
       await miro.board.ui.__hideButtonsPanels(['top', 'bottomBar', 'map'])
