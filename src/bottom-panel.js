@@ -57,7 +57,7 @@ miro.onReady(() => {
         await miro.board.ui.__clearToolbarModeLimit()
         await miro.board.__enableLeftClickOnCanvas()
         //await restoreAllLinks()
-        await showHotspots()
+        await showHideHotspots(true)
 
         //await miro.board.ui.closeBottomPanel() // This command should be last
       }
