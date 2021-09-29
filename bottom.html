@@ -6,12 +6,6 @@
   <body>
     <div id="bottom-panel" class="bottom-panel">
       <div v-if="editMode" class="edit-mode">
-        <div class="btn hotspot-button" @click="createHotspot">
-          <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-            <path fill="#96cdf7" fill-rule="evenodd" stroke="currentColor" stroke-width="2" d="M3 3h18v18H3z"/>
-          </svg>
-          <span>Hotspot</span>
-        </div>
         <div class="btn play-button" @click="play">
           <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
             <g fill="none" fill-rule="evenodd">
@@ -19,7 +13,12 @@
               <path fill="currentColor" d="M10.777 8.518l4.599 3.066a.5.5 0 0 1 0 .832l-4.599 3.066a.5.5 0 0 1-.777-.416V8.934a.5.5 0 0 1 .777-.416z"/>
             </g>
           </svg>
-          <span>Preview</span>
+        </div>
+        <div class="btn hotspot-button" @click="createHotspot">
+          <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <path fill="#96cdf7" fill-rule="evenodd" stroke="currentColor" stroke-width="2" d="M3 3h18v18H3z"/>
+          </svg>
+          <span>Hotspot</span>
         </div>
 			</div>
       <div v-if="playMode" class="edit-mode">
