@@ -65,10 +65,15 @@ body {
   margin-left: 8px;
   margin-right: 8px;
 }
+
+.play-button svg {
+  overflow: visible;
+}
+
 .hotspot-button {
   margin-right: 16px;
 }
-.hotspot-button span {
+.hotspot-button span, .play-button span {
   margin-left: 4px;
 }
 .link-button span {
