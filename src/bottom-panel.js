@@ -253,6 +253,10 @@ async function createStartHotspot() {
 		})
 }
 
+function findStartHotspot(shapes) {
+	return shapes.find(shape => shape.metadata[APP_ID] && shape.metadata[APP_ID].startHotspot)
+}
+
 async function checkAllHotspotsLinks(hotspots) {
 	const lines = await miro.board.widgets.get({type: 'line'})
 	let hotspotsWithoutLinks = hotspots.slice()
