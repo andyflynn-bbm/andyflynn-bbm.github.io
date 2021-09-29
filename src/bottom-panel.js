@@ -196,13 +196,13 @@ async function enterPrototypingMode(startHotspotWidget) {
 	if (hotspotsIsValid) {
 		const screenWidget = await goToWidgetFromHotspot(startHotspotWidget.id)
 		if (screenWidget) {
-			await miro.board.widgets.bringForward(hotspots)
-			await miro.board.ui.__hideButtonsPanels(['top', 'bottomBar', 'map'])
+      await miro.board.ui.__hideButtonsPanels(['top', 'bottomBar', 'map'])
 			await miro.board.ui.__limitToolbarMode('commentor')
 			await miro.board.selection.selectWidgets([])
-			await miro.board.__disableLeftClickOnCanvas()
+			//await miro.board.__disableLeftClickOnCanvas()
 			await showHideAllLinks(false)
 			await showHideHotspots(false)
+			await miro.board.widgets.bringForward(hotspots)
 		}
 		return screenWidget
 	}
@@ -351,7 +351,7 @@ async function showHideAllLinks(show) {
 			id,
 			clientVisible: show,
 		}))
-    //.filter(l => hotspotIds.some(h => h === l.startWidgetId || h === l.endWidgetId))
+    .filter(l => hotspotIds.some(h => h === l.startWidgetId || h === l.endWidgetId))
 
 	await miro.board.widgets.update(newLines)
 }
