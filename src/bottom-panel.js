@@ -42,8 +42,8 @@ miro.onReady(() => {
             // }
             console.log('Hotspot clicked!', hotspot.id)
           } else {
-            //blinkHotspots()
-            console.log('No hotspot clicked')
+            blinkHotspots()
+            //console.log('No hotspot clicked')
           }
         }
       },
@@ -125,4 +125,20 @@ async function createHotspot(pos) {
 
 function isHotspotWidget(widget) {
 	return widget.metadata[APP_ID] && widget.metadata[APP_ID].hotspot
+}
+
+async function blinkHotspots() {
+	const hotspots = await getHotspots()
+	const hotspotstoShow = hotspots.map(h => ({id: h.id, clientVisible: true}))
+	miro.board.widgets.update(hotspotstoShow)
+	miro.board.widgets.__blinkWidget(hotspotstoShow)
+	setTimeout(() => {
+		const hotspotsToHide = hotspots.map(h => ({id: h.id, clientVisible: false}))
+		miro.board.widgets.update(hotspotsToHide)
+	}, 500)
+}
+
+async function getHotspots() {
+	const shapes = await miro.board.widgets.get({type: 'shape'})
+	return shapes.filter(isHotspotWidget)
 }
