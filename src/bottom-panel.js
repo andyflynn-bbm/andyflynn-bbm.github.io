@@ -195,7 +195,9 @@ async function enterPrototypingMode(startHotspotWidget) {
 	const hotspotsIsValid = await checkAllHotspotsLinks(hotspots)
 
 	if (hotspotsIsValid) {
+    debugger
 		const screenWidget = await goToWidgetFromHotspot(startHotspotWidget.id)
+    debugger
 		if (screenWidget) {
 			await miro.board.widgets.bringForward(hotspots)
       await miro.board.ui.__hideButtonsPanels(['top', 'bottomBar', 'map'])
@@ -350,13 +352,12 @@ async function showHideAllLinks(show) {
   hotspotIds = hotspots.map(h => h.id)
 	const lines = await miro.board.widgets.get({'type': 'LINE'})
   //only hide lines attached to hotspots
-  debugger
 	const newLines = lines
+    .filter(l => hotspotIds.some(h => h === l.startWidgetId || h === l.endWidgetId))
 		.map(({id}) => ({
 			id,
 			clientVisible: show,
 		}))
-    .filter(l => hotspotIds.some(h => h === l.startWidgetId || h === l.endWidgetId))
 
 	await miro.board.widgets.update(newLines)
 }
