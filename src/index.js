@@ -8,12 +8,17 @@ miro.onReady(() => {
   
   miro.initialize({
     extensionPoints: {
-      bottomBar: {
-        title: 'Hotspots',
-        svgIcon: icon24,
-        onClick: () => {
-          miro.board.ui.openBottomPanel('bottom.html', {width: 280})
-        },
+      bottomBar: async () => {
+        const authorized = await miro.isAuthorized()
+				if (authorized) {
+					return {
+						title: 'Hotspots',
+            svgIcon: icon24,
+            onClick: () => {
+              miro.board.ui.openBottomPanel('bottom.html', {width: 280})
+            },
+					}
+				}
       },
     },
   })
