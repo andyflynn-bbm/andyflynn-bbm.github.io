@@ -217,16 +217,18 @@ async function createStartHotspot() {
 					type: 'SHAPE',
 					y: screen.bounds.y,
 					x: screen.bounds.left - 50 - screen.bounds.height * 0.2,
-					width: 100,
+					width: 150,
 					height: 100,
 					style: {
-						backgroundColor: '#ff9d94',
-						backgroundOpacity: 0.85,
+						backgroundColor: '#fff',
+						backgroundOpacity: 1,
 						borderOpacity: 1,
+            borderColor: '#000',
 						borderStyle: 2,
-						borderWidth: 0,
+						borderWidth: 2,
+            fontSize: '18',
 					},
-          text: 'Prototype start',
+          text: 'Start',
 					'metadata': {
 						[APP_ID]: {
 							hotspot: true,
@@ -240,10 +242,12 @@ async function createStartHotspot() {
 					startWidgetId: flagWidget.id,
 					endWidgetId: screen.id,
 					style: {
-						lineStartStyle: 0,
+            lineColor: '#2C9BF0',
 						lineEndStyle: 1,
-						lineStyle: 2,
-						lineType: 2,
+						lineStartStyle: 0,
+						lineStyle: 4,
+            lineThickness: 4,
+						lineType: 1,
 					},
 				})
 
