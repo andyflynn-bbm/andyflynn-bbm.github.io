@@ -53,7 +53,7 @@ miro.onReady(() => {
           const screenWidget = await enterPrototypingMode(startHotspotWidget)
           if (screenWidget) {
             //miro.__setRuntimeState({prototypingMode: true})
-            this.subscribePrototypingModeEvents()
+            subscribePrototypingModeEvents()
             //const screens = await findAllScreens()
             // this.setState({
             //   viewMode: 'play',
