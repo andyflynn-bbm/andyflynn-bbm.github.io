@@ -53,7 +53,7 @@ miro.onReady(() => {
           const screenWidget = await enterPrototypingMode(startHotspotWidget)
           if (screenWidget) {
             //miro.__setRuntimeState({prototypingMode: true})
-            //this.subscribePrototypingModeEvents()
+            this.subscribePrototypingModeEvents()
             //const screens = await findAllScreens()
             // this.setState({
             //   viewMode: 'play',
@@ -196,13 +196,13 @@ async function enterPrototypingMode(startHotspotWidget) {
 	if (hotspotsIsValid) {
 		const screenWidget = await goToWidgetFromHotspot(startHotspotWidget.id)
 		if (screenWidget) {
+			await miro.board.widgets.bringForward(hotspots)
       await miro.board.ui.__hideButtonsPanels(['top', 'bottomBar', 'map'])
 			await miro.board.ui.__limitToolbarMode('commentor')
 			await miro.board.selection.selectWidgets([])
-			//await miro.board.__disableLeftClickOnCanvas()
+			await miro.board.__disableLeftClickOnCanvas()
 			await showHideAllLinks(false)
 			await showHideHotspots(false)
-			await miro.board.widgets.bringForward(hotspots)
 		}
 		return screenWidget
 	}
