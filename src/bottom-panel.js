@@ -33,7 +33,6 @@ miro.onReady(() => {
         //miro.addListener('COMMENT_CREATED', onCommentCreated)
       },
       async onCanvasClicked(e) {
-        debugger
         if (this.state.viewMode === 'play') {
           const widgets = await miro.board.widgets.__getIntersectedObjects(e.data)
           const hotspot = widgets.filter(isHotspotWidget)[0]
