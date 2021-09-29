@@ -226,6 +226,7 @@ async function createStartHotspot() {
 						borderStyle: 2,
 						borderWidth: 0,
 					},
+          text: 'Prototype start',
 					'metadata': {
 						[APP_ID]: {
 							hotspot: true,
