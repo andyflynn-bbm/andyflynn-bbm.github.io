@@ -104,7 +104,7 @@ miro.onReady(() => {
         if (lines.length > 0) {
           const hotspots = await getHotspots()
           const hotspotIds = hotspots.map(h => h.id)
-          lines.forEach(({ id }) => {
+          lines.forEach(async ({ id }) => {
             const line = await miro.board.widgets.get({id})
             if (line && hotspotIds.some(h => h === line.startWidgetId || h === line.endWidgetId)) {
               const newLine = {
