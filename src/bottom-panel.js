@@ -226,6 +226,7 @@ async function createStartHotspot() {
             borderColor: '#000',
 						borderStyle: 2,
 						borderWidth: 2,
+            shapeType: 4,
             fontSize: '18',
 					},
           text: 'Start',
