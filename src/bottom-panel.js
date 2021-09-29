@@ -337,13 +337,17 @@ async function zoomToWidget(w) {
 	await miro.board.viewport.setViewport(v, padding)
 }
 
-function showHideAllLinks(show) {
+async function showHideAllLinks(show) {
+  const hotspots = await getHotspots()
+  hotspotIds = hotspots.map(h => h.id)
 	const lines = await miro.board.widgets.get({'type': 'LINE'})
+  //only hide lines attached to hotspots
 	const newLines = lines
 		.map(({id}) => ({
 			id,
 			clientVisible: show,
 		}))
+    //.filter(l => hotspotIds.some(h => h === l.startWidgetId || h === l.endWidgetId))
 
 	await miro.board.widgets.update(newLines)
 }
