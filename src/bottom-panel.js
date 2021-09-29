@@ -30,19 +30,21 @@ miro.onReady(() => {
         //miro.addListener('COMMENT_CREATED', onCommentCreated)
       },
       async onCanvasClicked(e) {
-        const widgets = await miro.board.widgets.__getIntersectedObjects(e.data)
-        const hotspot = widgets.filter(isHotspotWidget)[0]
+        if (this.state.viewMode === 'play') {
+          const widgets = await miro.board.widgets.__getIntersectedObjects(e.data)
+          const hotspot = widgets.filter(isHotspotWidget)[0]
 
-        if (hotspot) {
-          // const screenWidget = await goToWidgetFromHotspot(hotspot.id)
-          // if (screenWidget) {
-          //   const screenIndex = this.findScreenIndex(this.state.screens, screenWidget)
-          //   this.setState({screenIndex: screenIndex})
-          // }
-          console.log('Hotspot clicked!', hotspot.id)
-        } else {
-          //blinkHotspots()
-          console.log('No hotspot clicked')
+          if (hotspot) {
+            // const screenWidget = await goToWidgetFromHotspot(hotspot.id)
+            // if (screenWidget) {
+            //   const screenIndex = this.findScreenIndex(this.state.screens, screenWidget)
+            //   this.setState({screenIndex: screenIndex})
+            // }
+            console.log('Hotspot clicked!', hotspot.id)
+          } else {
+            //blinkHotspots()
+            console.log('No hotspot clicked')
+          }
         }
       },
       play() {
