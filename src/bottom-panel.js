@@ -123,7 +123,10 @@ miro.onReady(() => {
       const options = {
         dragDirection: 'vertical',
         draggableItemSelector: '.hotspot-button',
-        getDraggableItemPreview: () => {
+        getDraggableItemPreview: async () => {
+          const viewport = await miro.board.viewport.getViewport()
+          const scale = await viewport.getScale()
+          console.log(`Viewport scale: ${scale}`)
           return {
             width: 152,
             height: 66,
