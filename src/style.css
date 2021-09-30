@@ -39,6 +39,11 @@ body {
 .edit-mode {
   display: flex;
 }
+
+.edit-mode.play-mode {
+  justify-content: center;
+}
+
 .select-start-screen {
   display: flex;
   height: 48px;
@@ -78,7 +83,7 @@ body {
 .link-button span {
   margin-left: 2px;
 }
-.exit-button {
+.exit-button, .back-button {
   width: 48px;
   margin: 0 8px;
   font-weight: bold;

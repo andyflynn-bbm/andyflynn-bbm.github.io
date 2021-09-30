@@ -92,6 +92,7 @@ miro.onReady(() => {
         if (this.state.screens.length === 1) {
           this.edit()
         } else {
+          console.log(this.state.screens)
           gotoWidget(this.state.screens.pop())
         }
       },
