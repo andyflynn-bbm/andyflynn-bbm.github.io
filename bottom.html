@@ -23,11 +23,11 @@
         </div>
 			</div>
       <div v-if="playMode" class="edit-mode play-mode">
-        <div class="btn exit-button" @click="edit">
-          <span>Exit</span>
-        </div>
         <div v-if="state.screens.length" class="btn back-button" @click="back">
           <span>Back</span>
+        </div>
+        <div class="btn exit-button" @click="edit">
+          <span>Exit</span>
         </div>
       </div>
       <div v-if="selectMode" class="edit-mode">

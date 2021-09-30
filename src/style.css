@@ -61,22 +61,21 @@ body {
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  flex: 1;
 }
+
 .btn:hover {
   color: #4262ff;
 }
-.play-button {
-  margin-left: 8px;
-  margin-right: 8px;
+
+.btn:not(:last-child) {
+  border-right: 1px solid grey;
 }
 
 .play-button svg {
   overflow: visible;
 }
 
-.hotspot-button {
-  margin-right: 16px;
-}
 .hotspot-button span, .play-button span {
   margin-left: 4px;
 }
@@ -85,7 +84,6 @@ body {
 }
 .exit-button, .back-button {
   width: 48px;
-  margin: 0 8px;
   font-weight: bold;
 }
 .screen-number {
