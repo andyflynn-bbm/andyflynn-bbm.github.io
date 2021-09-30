@@ -32,7 +32,6 @@ miro.onReady(() => {
       },
       subscribePrototypingModeEvents() {
         miro.addListener('ESC_PRESSED', this.edit)
-        //miro.addListener('COMMENT_CREATED', onCommentCreated)
       },
       async onCanvasClicked(e) {
         if (this.state.viewMode === 'play') {
@@ -85,14 +84,13 @@ miro.onReady(() => {
         if (this.savedViewport) {
           await miro.board.viewport.set(this.savedViewport)
         }
-        await miro.board.ui.closeBottomPanel() // This command should be last
         this.state.screens = []
+        await miro.board.ui.closeBottomPanel() // This command should be last
       },
       async back() {
         if (this.state.screens.length === 1) {
           this.edit()
         } else {
-          console.log(this.state.screens)
           this.state.screens.pop()
           gotoWidget(this.state.screens.at(-1))
         }
@@ -244,7 +242,7 @@ async function enterPrototypingMode(startHotspotWidget) {
 		if (screenWidget) {
 			await miro.board.widgets.bringForward(hotspots)
       await miro.board.ui.__hideButtonsPanels(['top', 'bottomBar', 'map'])
-			await miro.board.ui.__limitToolbarMode('commentor')
+			await miro.board.ui.__limitToolbarMode('viewer')
 			await miro.board.selection.selectWidgets([])
 			await miro.board.__disableLeftClickOnCanvas()
 			await showHideAllLinks(false)
@@ -315,13 +313,13 @@ async function checkAllHotspotsLinks(hotspots) {
 	let linkWithoutScreen
 
 	lines.forEach(line => {
-		//for startWidgetId
+		// For startWidgetId
 		const linkedHotspot1 = hotspots.find(h => h.id === line.startWidgetId)
 		if (linkedHotspot1) {
 			hotspotsWithoutLinks = hotspotsWithoutLinks.filter(h => h.id !== linkedHotspot1.id)
 		}
 
-		//for endWidgetId
+		// For endWidgetId
 		const linkedHotspot2 = hotspots.find(h => h.id === line.endWidgetId)
 		if (linkedHotspot2) {
 			hotspotsWithoutLinks = hotspotsWithoutLinks.filter(h => h.id === linkedHotspot2.id)
@@ -397,7 +395,7 @@ async function showHideAllLinks(show) {
   const hotspots = await getHotspots()
   hotspotIds = hotspots.map(h => h.id)
 	const lines = await miro.board.widgets.get({'type': 'LINE'})
-  //only hide lines attached to hotspots
+  // Only hide lines attached to hotspots
 	const newLines = lines
     .filter(l => hotspotIds.some(h => h === l.startWidgetId || h === l.endWidgetId))
 		.map(({id}) => ({
