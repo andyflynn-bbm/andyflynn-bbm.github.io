@@ -49,8 +49,7 @@ miro.onReady(() => {
             //console.log('No hotspot clicked')
           }
         } else {
-          this.viewportScale = await miro.board.viewport.getScale()
-          console.log(`Viewport scale: ${this.viewportScale}`)
+          this.setViewportScale()
         }
       },
       async play() {
@@ -91,6 +90,10 @@ miro.onReady(() => {
 
         await miro.board.ui.closeBottomPanel() // This command should be last
       },
+      async setViewportScale() {
+        this.viewportScale = await miro.board.viewport.getScale()
+        console.log(`Viewport scale: ${this.viewportScale}`)
+      },
       async updateLineStyle(e) {
         const newStyle = {
           style: {
@@ -122,15 +125,14 @@ miro.onReady(() => {
         }
       }
     },
-    mounted() {
+    async mounted() {
       const options = {
         dragDirection: 'vertical',
         draggableItemSelector: '.hotspot-button',
         getDraggableItemPreview: () => {
-          console.log(this.viewportScale)
           return {
-            width: 152,
-            height: 66,
+            width: 152 * this.viewportScale || 1,
+            height: 66 * this.viewportScale || 1,
             url: HOTSPOT_PREVIEW,
           }
         },
@@ -141,6 +143,7 @@ miro.onReady(() => {
       miro.board.ui.initDraggableItemsContainer(this.$el, options)
       miro.addListener('WIDGETS_CREATED', this.updateLineStyle)
       miro.addListener('CANVAS_CLICKED', this.onCanvasClicked)
+      this.setViewportScale()
     }
   })
 })
