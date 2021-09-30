@@ -4,7 +4,7 @@
     <link rel="stylesheet" href="src/style.css" />
   </head>
   <body>
-    <div id="bottom-panel" class="bottom-panel">
+    <div id="bottom-panel" class="bottom-panel" @mouseover="setViewportScale">
       <div v-if="editMode" class="edit-mode">
         <div class="btn play-button" @click="play">
           <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
