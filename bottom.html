@@ -26,7 +26,7 @@
         <div class="btn exit-button" @click="edit">
           <span>Exit</span>
         </div>
-        <div v-if="state.lastScreen" class="btn back-button" @click="back">
+        <div v-if="state.screens.length" class="btn back-button" @click="back">
           <span>Back</span>
         </div>
       </div>
