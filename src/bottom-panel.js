@@ -8,7 +8,8 @@ miro.onReady(() => {
         state: {
           viewMode: 'edit'
         },
-        viewportScale: ''
+        viewportScale: 1,
+        savedViewport: null,
       }
     },
     computed: {
@@ -54,6 +55,7 @@ miro.onReady(() => {
       },
       async play() {
         this.state.viewMode = 'play'
+        this.savedViewport = await miro.board.viewport.getViewport()
         const shapes = await miro.board.widgets.get({'type': 'SHAPE'})
         const startHotspotWidget = findStartHotspot(shapes)
         if (startHotspotWidget) {
@@ -87,7 +89,9 @@ miro.onReady(() => {
         await miro.board.__enableLeftClickOnCanvas()
         await showHideAllLinks(true)
         await showHideHotspots(true)
-
+        if (this.savedViewport) {
+          await miro.board.viewport.set(this.savedViewport)
+        }
         await miro.board.ui.closeBottomPanel() // This command should be last
       },
       async setViewportScale() {
