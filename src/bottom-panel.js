@@ -6,7 +6,8 @@ miro.onReady(() => {
     data() {
       return {
         state: {
-          viewMode: 'edit'
+          viewMode: 'edit',
+          screens: [],
         },
         viewportScale: 1,
         savedViewport: null,
@@ -41,13 +42,12 @@ miro.onReady(() => {
           if (hotspot) {
             console.log('Hotspot clicked!', hotspot.id)
             const screenWidget = await goToWidgetFromHotspot(hotspot.id)
-            // if (screenWidget) {
-            //   const screenIndex = this.findScreenIndex(this.state.screens, screenWidget)
-            //   this.setState({screenIndex: screenIndex})
-            // }
+            
+            if (screenWidget) {
+              this.state.screens.push(screenWidget)
+            }
           } else {
             blinkHotspots()
-            //console.log('No hotspot clicked')
           }
         } else {
           this.setViewportScale()
@@ -61,15 +61,8 @@ miro.onReady(() => {
         if (startHotspotWidget) {
           const screenWidget = await enterPrototypingMode(startHotspotWidget)
           if (screenWidget) {
-            //miro.__setRuntimeState({prototypingMode: true})
             this.subscribePrototypingModeEvents()
-            //const screens = await findAllScreens()
-            // this.setState({
-            //   viewMode: 'play',
-            //   screens: screens,
-            //   screenIndex: this.findScreenIndex(screens, screenWidget),
-            // })
-            // miro.board.ui.resizeTo({width: PLAY_WIDTH})
+            this.state.screens.push(screenWidget)
           } else {
             this.edit()
           }
@@ -93,6 +86,14 @@ miro.onReady(() => {
           await miro.board.viewport.set(this.savedViewport)
         }
         await miro.board.ui.closeBottomPanel() // This command should be last
+        this.state.screens = []
+      },
+      async back() {
+        if (this.state.screens.length === 1) {
+          this.edit()
+        } else {
+          gotoWidget(this.state.screens.pop())
+        }
       },
       async setViewportScale() {
         this.viewportScale = await miro.board.viewport.getScale()
