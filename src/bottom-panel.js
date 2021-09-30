@@ -1,4 +1,4 @@
-const HOTSPOT_PREVIEW = `data:image/svg+xml,%3Csvg width='152' height='66' xmlns='http://www.w3.org/2000/svg'%3E%3Cg%3E%3Crect stroke='null' x='0' y='0' fill-opacity='0.5' fill='%232d9bf0' height='140' width='140'/%3E%3C/g%3E%3C/svg%3E`
+const getHotspotPreview = (height, width) => `data:image/svg+xml,%3Csvg width='${width}' height='${height}' xmlns='http://www.w3.org/2000/svg'%3E%3Cg%3E%3Crect stroke='null' x='0' y='0' fill-opacity='0.5' fill='%232d9bf0' height='${height}' width='${width}'/%3E%3C/g%3E%3C/svg%3E`
 const APP_ID = '3074457364657223133'
 miro.onReady(() => {
   var vm = new Vue({
@@ -130,10 +130,12 @@ miro.onReady(() => {
         dragDirection: 'vertical',
         draggableItemSelector: '.hotspot-button',
         getDraggableItemPreview: () => {
+          const width = 152 * this.viewportScale || 1
+          const height = 66 * this.viewportScale || 1
           return {
-            width: 152 * this.viewportScale || 1,
-            height: 66 * this.viewportScale || 1,
-            url: HOTSPOT_PREVIEW,
+            width,
+            height,
+            url: getHotspotPreview(height, width),
           }
         },
         onDrop: (canvasX, canvasY) => {
