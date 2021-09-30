@@ -93,7 +93,8 @@ miro.onReady(() => {
           this.edit()
         } else {
           console.log(this.state.screens)
-          gotoWidget(this.state.screens.pop())
+          this.state.screens.pop()
+          gotoWidget(this.state.screens.slice(-1))
         }
       },
       async setViewportScale() {
