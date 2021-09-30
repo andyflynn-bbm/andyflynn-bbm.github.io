@@ -7,7 +7,8 @@ miro.onReady(() => {
       return {
         state: {
           viewMode: 'edit'
-        }
+        },
+        viewportScale: ''
       }
     },
     computed: {
@@ -29,7 +30,6 @@ miro.onReady(() => {
       },
       subscribePrototypingModeEvents() {
         miro.addListener('ESC_PRESSED', this.edit)
-        miro.addListener('CANVAS_CLICKED', this.onCanvasClicked)
         //miro.addListener('COMMENT_CREATED', onCommentCreated)
       },
       async onCanvasClicked(e) {
@@ -48,6 +48,9 @@ miro.onReady(() => {
             blinkHotspots()
             //console.log('No hotspot clicked')
           }
+        } else {
+          this.viewportScale = await miro.board.viewport.getScale()
+          console.log(`Viewport scale: ${this.viewportScale}`)
         }
       },
       async play() {
@@ -123,9 +126,8 @@ miro.onReady(() => {
       const options = {
         dragDirection: 'vertical',
         draggableItemSelector: '.hotspot-button',
-        getDraggableItemPreview: async () => {
-          const scale = await miro.board.viewport.getScale()
-          console.log(`Viewport scale: ${scale}`)
+        getDraggableItemPreview: () => {
+          console.log(this.viewportScale)
           return {
             width: 152,
             height: 66,
@@ -138,6 +140,7 @@ miro.onReady(() => {
       }
       miro.board.ui.initDraggableItemsContainer(this.$el, options)
       miro.addListener('WIDGETS_CREATED', this.updateLineStyle)
+      miro.addListener('CANVAS_CLICKED', this.onCanvasClicked)
     }
   })
 })
